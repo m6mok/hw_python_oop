@@ -43,8 +43,9 @@ class Training:
         """Получить количество затраченных калорий."""
         COEFF_CALORIE_1, COEFF_CALORIE_2 = 18, 20
         MINUTES_IN_HOUR = 60
-        return ((COEFF_CALORIE_1 * self.get_mean_speed() - COEFF_CALORIE_2) *
-                self.weight / self.M_IN_KM * self.duration * MINUTES_IN_HOUR)
+        return ((COEFF_CALORIE_1 * self.get_mean_speed() - COEFF_CALORIE_2)
+                * self.weight / self.M_IN_KM
+                * self.duration * MINUTES_IN_HOUR)
 
     def show_training_info(self) -> InfoMessage:
         """Вернуть информационное сообщение о выполненной тренировке."""
@@ -75,10 +76,10 @@ class SportsWalking(Training):
     def get_spent_calories(self) -> float:
         COEFF_CALORIE_1, COEFF_CALORIE_2 = 0.035, 0.029
         MINUTES_IN_HOUR = 60
-        return ((COEFF_CALORIE_1 * self.weight +
-                (self.get_mean_speed()**2 // self.height) *
-                COEFF_CALORIE_2 * self.weight) *
-                self.duration * MINUTES_IN_HOUR)
+        return ((COEFF_CALORIE_1 * self.weight
+                + (self.get_mean_speed()**2 // self.height)
+                * COEFF_CALORIE_2 * self.weight)
+                * self.duration * MINUTES_IN_HOUR)
 
     def show_training_info(self) -> InfoMessage:
         return InfoMessage('SportsWalking',
@@ -104,13 +105,13 @@ class Swimming(Training):
         self.count_pool = count_pool
 
     def get_mean_speed(self) -> float:
-        return (self.length_pool * self.count_pool /
-                self.M_IN_KM / self.duration)
+        return (self.length_pool * self.count_pool
+                / self.M_IN_KM / self.duration)
 
     def get_spent_calories(self) -> float:
         COEFF_CALORIE_1, COEFF_CALORIE_2 = 1.1, 2
-        return ((self.get_mean_speed() + COEFF_CALORIE_1) *
-                COEFF_CALORIE_2 * self.weight)
+        return ((self.get_mean_speed() + COEFF_CALORIE_1)
+                * COEFF_CALORIE_2 * self.weight)
 
     def show_training_info(self) -> InfoMessage:
         return InfoMessage('Swimming',
