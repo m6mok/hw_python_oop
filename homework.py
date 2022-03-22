@@ -52,8 +52,8 @@ class Training:
 
     def get_spent_calories(self) -> float:
         """Получить количество затраченных калорий."""
-        return (
-            (self.RUN_SPEED_MUL * self.get_mean_speed()
+        return ((
+            self.RUN_SPEED_MUL * self.get_mean_speed()
             - self.RUN_SPEED_ADD)
             * self.weight / self.M_IN_KM
             * self.duration * self.MIN_IN_H
@@ -85,8 +85,8 @@ class SportsWalking(Training):
     height: float
 
     def get_spent_calories(self) -> float:
-        return (
-            (self.S_WALK_WEIGHT_MUL * self.weight
+        return ((
+            self.S_WALK_WEIGHT_MUL * self.weight
             + self.get_mean_speed() ** 2 // self.height
             * self.S_WALK_SPEED_MUL * self.weight)
             * self.duration * self.MIN_IN_H
@@ -99,7 +99,7 @@ class Swimming(Training):
     LEN_STEP = 1.38
     SWIM_SPEED_ADD = 1.1
     SWIM_CALORIES_MUL = 2
-    
+
     length_pool: float
     count_pool: int
 
@@ -115,6 +115,7 @@ class Swimming(Training):
             * self.SWIM_CALORIES_MUL * self.weight
         )
 
+
 def read_package(workout_type: str, data: Sequence[float]) -> Training:
     """Прочитать данные полученные от датчиков."""
     sought_class = {
@@ -124,9 +125,11 @@ def read_package(workout_type: str, data: Sequence[float]) -> Training:
     }[workout_type]
     return sought_class(*data[:len(fields(sought_class))])
 
+
 def main(training: Training) -> None:
     """Главная функция."""
     print(training.show_training_info().get_message())
+
 
 if __name__ == '__main__':
     packages = [
