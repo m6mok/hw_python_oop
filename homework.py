@@ -61,12 +61,12 @@ class Training:
 class Running(Training):
     """Тренировка: бег."""
     SPEED_MULTIPLIER = 18
-    SPEED_ADDITIVE = 20
+    SPEED_ADDITIVE = -20
 
     def get_spent_calories(self) -> float:
         return ((
             self.SPEED_MULTIPLIER * self.get_mean_speed()
-            - self.SPEED_ADDITIVE)
+            + self.SPEED_ADDITIVE)
             * self.weight / self.M_IN_KM
             * self.duration * self.MIN_IN_H
         )
@@ -114,32 +114,36 @@ class Swimming(Training):
 
 def read_package(workout_type: str, data: Sequence[float]) -> Training:
     """Прочитать данные полученные от датчиков."""
-    try:
-        sought_class = {
-            'RUN': Running,
-            'WLK': SportsWalking,
-            'SWM': Swimming
-        }[workout_type]
-        if len(data) == len(fields(sought_class)):
-            return sought_class(*data)
-    except KeyError:
-        pass
+    classes = {
+        'RUN': Running,
+        'WLK': SportsWalking,
+        'SWM': Swimming
+    }
+    if workout_type not in classes:
+        raise ValueError(
+            f'Некорректное значение "{workout_type}" аттрибута workout_type.'
+        )
+    sought_class = classes[workout_type]
+    if len(data) != len(fields(sought_class)):
+        raise Exception(
+            f'Количество элементов data '
+            f'не совпадает с количестом полей класса sought_class.\n'
+            f'Требуется: {len(fields(sought_class))}. '
+            f'Найдено: {len(data)}.'
+        )
+    return sought_class(*data)
 
 
 def main(training: Training) -> None:
     """Главная функция."""
-    try:
-        print(training.show_training_info().get_message())
-    except AttributeError:
-        pass
+    print(training.show_training_info().get_message())
 
 
 if __name__ == '__main__':
     packages = [
         ('SWM', [720, 1, 80, 25, 40]),
         ('RUN', [15000, 1, 75]),
-        ('WLK', [9000, 1, 75, 180]),
-        ('SWM', [720, 1])
+        ('WLK', [9000, 1, 75, 180])
     ]
 
     for workout_type, data in packages:
