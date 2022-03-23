@@ -126,8 +126,8 @@ CLASSES = {
         'fields_count': len(fields(Swimming))
     }
 }
-VALUE_ERROR_TEXT = 'Некорректное значение аттрибута: "{value}".'
-INDEX_ERROR_TEXT = (
+STRING_VALUE_ERROR_TEXT = 'Некорректное значение аттрибута: "{value}".'
+SEQUENCE_VALUE_ERROR_TEXT = (
     'Количество элементов аргумента '
     'не совпадает с количестом полей класса {class_name}.\n'
     'Требуется: {required}. Найдено: {found}.'
@@ -138,11 +138,11 @@ def read_package(workout_type: str, data: Sequence[float]) -> Training:
     """Прочитать данные полученные от датчиков."""
     if workout_type not in CLASSES:
         raise ValueError(
-            VALUE_ERROR_TEXT.format(value=workout_type)
+            STRING_VALUE_ERROR_TEXT.format(value=workout_type)
         )
     if len(data) != CLASSES[workout_type]['fields_count']:
-        raise IndexError(
-            INDEX_ERROR_TEXT.format(
+        raise ValueError(
+            SEQUENCE_VALUE_ERROR_TEXT.format(
                 class_name=CLASSES[workout_type]['class'].__name__,
                 required=CLASSES[workout_type]['fields_count'],
                 found=len(data)
