@@ -112,26 +112,43 @@ class Swimming(Training):
         )
 
 
+CLASSES = {
+    'RUN': {
+        'class': Running,
+        'fields_count': len(fields(Running))
+    },
+    'WLK': {
+        'class': SportsWalking,
+        'fields_count': len(fields(SportsWalking))
+    },
+    'SWM': {
+        'class': Swimming,
+        'fields_count': len(fields(Swimming))
+    }
+}
+VALUE_ERROR_TEXT = 'Некорректное значение аттрибута: "{value}".'
+INDEX_ERROR_TEXT = (
+    'Количество элементов аргумента '
+    'не совпадает с количестом полей класса {class_name}.\n'
+    'Требуется: {required}. Найдено: {found}.'
+)
+
+
 def read_package(workout_type: str, data: Sequence[float]) -> Training:
     """Прочитать данные полученные от датчиков."""
-    classes = {
-        'RUN': Running,
-        'WLK': SportsWalking,
-        'SWM': Swimming
-    }
-    if workout_type not in classes:
+    if workout_type not in CLASSES:
         raise ValueError(
-            f'Некорректное значение "{workout_type}" аттрибута workout_type.'
+            VALUE_ERROR_TEXT.format(value=workout_type)
         )
-    sought_class = classes[workout_type]
-    if len(data) != len(fields(sought_class)):
-        raise Exception(
-            f'Количество элементов data '
-            f'не совпадает с количестом полей класса sought_class.\n'
-            f'Требуется: {len(fields(sought_class))}. '
-            f'Найдено: {len(data)}.'
+    if len(data) != CLASSES[workout_type]['fields_count']:
+        raise IndexError(
+            INDEX_ERROR_TEXT.format(
+                class_name=CLASSES[workout_type]['class'].__name__,
+                required=CLASSES[workout_type]['fields_count'],
+                found=len(data)
+            )
         )
-    return sought_class(*data)
+    return CLASSES[workout_type]['class'](*data)
 
 
 def main(training: Training) -> None:
